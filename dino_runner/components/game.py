@@ -1,7 +1,9 @@
 import pygame
+from pygame import mixer
 
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 from dino_runner.components.dinosaur import Dinosaur
+
 
 class Game:
     def __init__(self):
@@ -15,6 +17,7 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 380
         self.player = Dinosaur()
+    
 
     def run(self):
         # Game loop: events - update - draw
@@ -23,12 +26,17 @@ class Game:
             self.events()
             self.update()
             self.draw()
+            self.sound()
         pygame.quit()
 
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
+
+    def sound(self):
+        sound = pygame.mixer.Sound('fonddino.wav')
+        sound.play()
 
     def update(self):
         pass
