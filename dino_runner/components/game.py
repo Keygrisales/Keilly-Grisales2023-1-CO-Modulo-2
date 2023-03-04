@@ -17,6 +17,7 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 380
         self.player = Dinosaur()
+        self.music = False
     
 
     def run(self):
@@ -26,7 +27,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
-            self.sound()
+            self.soundd()
         pygame.quit()
 
     def events(self):
@@ -34,12 +35,15 @@ class Game:
             if event.type == pygame.QUIT:
                 self.playing = False
 
-    def sound(self):
-        sound = pygame.mixer.Sound('fonddino.wav')
-        sound.play()
+    def soundd(self):
+        if not self.music:
+            sound = pygame.mixer.Sound('fonddino.wav')
+            sound.play()
+            self.music = True
 
     def update(self):
-        pass
+        user_input = pygame.key.get_pressed() #nos dice que tecla esta precionando el usuario
+        self.player.update(user_input)
 
     def draw(self):
         self.clock.tick(FPS)
