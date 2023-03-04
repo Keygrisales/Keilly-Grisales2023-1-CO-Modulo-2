@@ -3,6 +3,7 @@ from pygame import mixer
 
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 from dino_runner.components.dinosaur import Dinosaur
+from dino_runner.components.cactus import Cactus
 
 
 class Game:
@@ -44,6 +45,7 @@ class Game:
     def update(self):
         user_input = pygame.key.get_pressed() #nos dice que tecla esta precionando el usuario
         self.player.update(user_input)
+
 
     def draw(self):
         self.clock.tick(FPS)
