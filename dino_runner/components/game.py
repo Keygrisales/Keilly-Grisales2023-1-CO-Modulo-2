@@ -3,7 +3,7 @@ from pygame import mixer
 
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 from dino_runner.components.dinosaur import Dinosaur
-from dino_runner.components.cactus import Cactus
+from dino_runner.components.obstacles.obstacle_manager import ObastaclaManager
 
 
 class Game:
@@ -19,6 +19,7 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinosaur()
         self.music = False
+        self.obstacle_manager = ObastaclaManager()
     
 
     def run(self):
@@ -45,6 +46,7 @@ class Game:
     def update(self):
         user_input = pygame.key.get_pressed() #nos dice que tecla esta precionando el usuario
         self.player.update(user_input)
+        self.obstacle_manager.update(self)
 
 
     def draw(self):
@@ -52,6 +54,7 @@ class Game:
         self.screen.fill((255, 255, 255)) #fill para el color
         self.draw_background() # llamamos al metodo para que mueste la imagen
         self.player.draw(self.screen)
+        self.obstacle_manager.draw(self.screen)
         pygame.display.update() # update o flip actualiza (permite que se muestre el dibj en pantalla)
         #pygame.display.flip()
 

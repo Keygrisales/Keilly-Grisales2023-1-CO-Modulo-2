@@ -11,8 +11,11 @@ class Obstacle(Sprite):
         self.rect = self.image[obstacle_type].get_rect()
         self.rect.x = SCREEN_WIDTH #salir obstaculo desde la derecha
 
-    def update(self, game_speed):
+    def update(self, game_speed, obstacles):
         self.rect.x -= game_speed
+
+        if self.rect.x < -self.rect.width:
+            obstacles.pop()
 
 
     def draw(self, screen):
