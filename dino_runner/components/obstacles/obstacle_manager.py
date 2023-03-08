@@ -29,9 +29,10 @@ class ObastaclaManager:
                     bird.rect.y = 320
                 elif fly == 1:
                     bird.rect.y = 250
-                elif fly == 2:
+                else:
                     bird.rect.y = 230
                 self.obstacles.append(bird)
+        
         
         
         for obstacle in self.obstacles:
@@ -39,9 +40,13 @@ class ObastaclaManager:
 
             if game.player.dino_rect.colliderect(obstacle.rect):
                 pygame.time.delay(1000)
+                game.death_count += 1
                 game.playing = False
                 break
 
     def draw(self, screen):
         for obastacle in self.obstacles:
             obastacle.draw(screen)
+
+    def reset_obstacles(self):
+        self.obstacles = []

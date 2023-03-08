@@ -21,6 +21,9 @@ class Dinosaur(Sprite):
         self.dino_duck = False
         self.jump_speed = self.JUMP_SPEED
         self.duck_speed = self.DUCK_SPEED
+        sound_jump = False
+
+   
 
     def update(self, user_input):
         if self.dino_run:
@@ -32,7 +35,11 @@ class Dinosaur(Sprite):
         if self.dino_duck:
             self.duck()
 
+        
         if user_input[pygame.K_UP] and not self.dino_jump:
+            sound_jump = pygame.mixer.Sound('jump.wav')
+            sound_jump.play()
+            sound_jump = True
             self.dino_jump = True
             self.dino_run = False
             self.dino_duck = False
