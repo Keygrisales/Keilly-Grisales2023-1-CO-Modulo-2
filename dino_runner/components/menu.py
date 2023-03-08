@@ -10,8 +10,8 @@ class Menu:
         screen.fill((255, 255, 255))
         self.font = pygame.font.Font(FONT_STYLE, 30)
         self.text = self.font.render(message, True, (0, 0, 0))
-        self.text_rect = self.text.get_rect()
-        self.text_rect.center = (self.half_screen_width, self.half_screen_height)
+        self.text_rect = self.text.get_rect() 
+        self.text_rect.center = (self.half_screen_width, self.half_screen_height) 
 
 
     def update(self, game):
@@ -20,10 +20,8 @@ class Menu:
 
     def draw(self, screen):
         screen.blit(self.text, self.text_rect)
+        
 
-    def reset_screen_color(self, screen):
-        screen.fill((255, 255, 255))
-    
     def handle_events_on_menu(self, game):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -32,10 +30,35 @@ class Menu:
             elif event.type == pygame.KEYDOWN: #presionar tecla para correr
                 game.run()
 
+    def reset_screen_color(self, screen):
+        screen.fill((255, 255, 255))
+
+
     def update_message(self, message):
         self.text = self.font.render(message, True, (0, 0, 0))
         self.text_rect = self.text.get_rect()
         self.text_rect.center = (self.half_screen_width, self.half_screen_height)
+
+    def score_message(self, message_score, screen):
+        self.text = self.font.render(message_score, True, (0, 0, 0))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (500, 350)
+        screen.blit(self.text, self.text_rect)
+        
+
+    
+    def max_message(self, message_max, screen):
+        self.text = self.font.render(message_max, True, (0, 0, 0))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (500, 400)
+        screen.blit(self.text, self.text_rect)
+        
+
+    def death_message(self, message_death, screen):
+        self.text = self.font.render(message_death, True, (0, 0, 0))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (500, 450)
+        screen.blit(self.text, self.text_rect)
 
 
 

@@ -2,38 +2,33 @@ import pygame
 import random
 from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.components.obstacles.bird import Bird
-from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS, BIRD
+from dino_runner.components.score import Score
+
+from dino_runner.utils.constants import SMALL_CACTUS
 
 
 class ObastaclaManager:
     def __init__(self):
         self.obstacles = []
 
+    def generete_obstacle(self, obstacle_type):
+        if obstacle_type == 0:
+            cactus_type = 'SMALL'
+            obstacle = Cactus(cactus_type)
+        elif  obstacle_type == 1:
+            cactus_type = 'LARGE'
+            obstacle = Cactus(cactus_type)
+        else:
+            obstacle = Bird()
+        return obstacle
+        
+
     def update(self, game):
         if len(self.obstacles) == 0:
-            type = random.randint(0,2)
-            
-            if type == 0:
-                cactus = Cactus(SMALL_CACTUS)
-                cactus.rect.y = 325
-                self.obstacles.append(cactus)
-            elif type == 1:
-                cactus = Cactus(LARGE_CACTUS)
-                cactus.rect.y = 300
-                self.obstacles.append(cactus)
-            
-            else:
-                bird = Bird(BIRD)
-                fly = random.randint(0,2)
-                if fly == 0:
-                    bird.rect.y = 320
-                elif fly == 1:
-                    bird.rect.y = 250
-                else:
-                    bird.rect.y = 230
-                self.obstacles.append(bird)
-        
-        
+            obstacle_type = random.randint(0,2)
+            obstacle = self.generete_obstacle(obstacle_type)
+            self.obstacles.append(obstacle)
+
         
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)

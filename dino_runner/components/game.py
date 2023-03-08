@@ -1,10 +1,11 @@
 import pygame
 from pygame import mixer
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, FONT_STYLE
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObastaclaManager
 from dino_runner.components.menu import Menu
+from dino_runner.components.score import Score
 
 
 class Game:
@@ -26,8 +27,13 @@ class Game:
         self.obstacle_manager = ObastaclaManager()
         self.menu = Menu ('press any key to start...', self.screen)
         self.running = False
-        self.score = 0 #puntaje
+        self.score = Score() #puntaje
         self.death_count = 0 #puntaje de muerte
+        self.max_score = 0 #puntaje max
+        self.list_score = Score.max_score
+
+       
+      
 
     def execute(self):
         self.running = True
@@ -41,8 +47,8 @@ class Game:
     def run(self):
         # Game loop: events - update - draw
         self.obstacle_manager.reset_obstacles()
-        self.game_speed = self.GAME_SPEED #receteamos velocidad
-        self.score = 0 #receteamos puntaje
+        self.score.reset_score()
+        self.game_speed = self.GAME_SPEED #receteamos velocidad 
         self.playing = True
         while self.playing:
             self.events()
@@ -69,7 +75,8 @@ class Game:
         user_input = pygame.key.get_pressed() #nos dice que tecla esta precionando el usuario
         self.player.update(user_input)
         self.obstacle_manager.update(self)
-        self.update_score()
+        self.score.update_score(self)
+    
 
 
 
@@ -79,7 +86,7 @@ class Game:
         self.draw_background() # llamamos al metodo para que mueste la imagen
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
-        self.draw_score()
+        self.score.draw(self.screen)
         pygame.display.update() # update o flip actualiza (permite que se muestre el dibj en pantalla)
         #pygame.display.flip()
 
@@ -96,28 +103,26 @@ class Game:
         self.menu.reset_screen_color(self.screen)
         half_screen_width = SCREEN_WIDTH // 2
         half_screen_height = SCREEN_HEIGHT // 2
-
+        self.score_counter = 0
+        
         if self.death_count == 0:
-            self.menu.draw(self.screen) #imprimir cuando muerte = 0
+            self.menu.draw(self.screen) 
         else:
-            self.menu.update_message('new message')
-            self.menu.draw(self.screen)
+            self.menu.update_message('Game over, press any key to restart.')
+            self.menu.score_message(f' Your score: {self.list_score[-1]}', self.screen)
+            self.menu.max_message(f' Max score: {max(self.list_score)}', self.screen)
+            self.menu.death_message(f' Death: {self.death_count}', self.screen)
+            self.menu.draw(self.screen) 
+            
 
-        self.screen.blit(ICON, (half_screen_width - 50, half_screen_height - 140))
+        self.screen.blit(ICON, (half_screen_width - 50, half_screen_height - 140)) #icono
 
         self.menu.update(self)
 
-    def update_score(self):
-        self.score += 1 # actualiza puntaje
+   
 
-        if self.score % 100 == 0 and self.game_speed < 500: #aumentamos velocidad
-            self.game_speed += 5
 
-    def draw_score(self):
-        font = pygame.font.Font(FONT_STYLE, 30)
-        text = font.render(f"Score: {self.score}", True, (0, 0, 0)) #imprimir puntaje
-        text_rect = text.get_rect()
-        text_rect.center = (1000, 50)
-        self.screen.blit(text, text_rect)
+
+        
 
 
