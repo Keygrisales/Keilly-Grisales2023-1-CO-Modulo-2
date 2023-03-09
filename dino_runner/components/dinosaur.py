@@ -1,17 +1,22 @@
 import pygame
 from pygame.sprite import Sprite
 
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, RUNNING_SHIELD, JUMPING_SHIELD, DUCKING_SHIELD, DEFAULT_TYPE, SHIELD_TYPE
+
+RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
+JUMP_IMG = {DEFAULT_TYPE: JUMPING_SHIELD, SHIELD_TYPE: JUMPING_SHIELD}
+DUCK_IMG = {DEFAULT_TYPE: DUCKING_SHIELD, SHIELD_TYPE:DUCKING_SHIELD}
 
 class Dinosaur(Sprite):
 
     X_POS = 80
     Y_POS = 310
     JUMP_SPEED = 8.5
-    DUCK_SPEED = -8.5
+    Y_POS_DUCK = 340
 
     def __init__(self):
-        self.image = RUNNING [0]
+        self.type = DEFAULT_TYPE
+        self.image = RUN_IMG[self.type][0]
         self.dino_rect = self.image.get_rect() # pposiciones imag
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
@@ -20,7 +25,8 @@ class Dinosaur(Sprite):
         self.dino_jump = False
         self.dino_duck = False
         self.jump_speed = self.JUMP_SPEED
-        self.duck_speed = self.DUCK_SPEED
+        self.has_power_up = False
+        self.power_time_up = 0
         sound_jump = False
 
    
@@ -43,32 +49,31 @@ class Dinosaur(Sprite):
             self.dino_jump = True
             self.dino_run = False
             self.dino_duck = False
-        if self.step_index >= 10: #para que siga cambiando de imag el dino 
-            self.step_index = 0
 
-        if user_input[pygame.K_DOWN] and not self.dino_duck:
+        elif user_input[pygame.K_DOWN] and not self.dino_jump:
             self.dino_duck = True
             self.dino_jump = False
             self.dino_run = False
-        if self.step_index >= 10: #para que siga cambiando de imag el dino 
-            self.step_index = 0
 
-        elif not self.dino_duck and not self.dino_jump:
+        elif not self.dino_jump:
             self.dino_duck = False
             self.dino_run = True
             self.dino_jump = False
 
+        if self.step_index >= 10: #para que siga cambiando de imag el dino 
+            self.step_index = 0
+
 
        
     def run(self):
-        self.image = RUNNING[0] if self.step_index < 5 else RUNNING[1]
+        self.image = RUN_IMG[self.type][self.step_index // 5]
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.Y_POS
         self.dino_rect.y = self.Y_POS
         self.step_index += 1
 
     def jump(self):
-        self.image = JUMPING
+        self.image = JUMP_IMG[self.type]
         self.dino_rect.y -= self.jump_speed * 4
         self.jump_speed -= 0.8
 
@@ -78,19 +83,22 @@ class Dinosaur(Sprite):
             self.jump_speed = self.JUMP_SPEED
 
     def duck(self):
-        self.image = DUCKING
-        self.image = DUCKING[0] if self.step_index < 5 else DUCKING[1]
+        self.image = DUCK_IMG[self.type][self.step_index // 5]
         self.dino_rect = self.image.get_rect()
-        self.dino_rect.y = 340
+        self.dino_rect.x = self.X_POS
+        self.dino_rect.y = self.Y_POS_DUCK
         self.step_index += 1
-
-        if self.DUCK_SPEED < -self.DUCK_SPEED: #controla que no quede agachado por siempre
-            self.dino_rect.x = self.Y_POS #310
-            self.dino_duck = False
-
 
     def draw(self, screen): #dibujar en pantalla
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
+
+    def reset(self):
+        self.dino_rect.x = self.X_POS
+        self.dino_rect.y = self.Y_POS
+        self.step_index = 0
+        self.dino_run = True
+        self.dino_duck = False
+        self.jump_speed = self.JUMP_SPEED
 
         
         
