@@ -1,11 +1,11 @@
 import pygame
 from pygame.sprite import Sprite
 
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, RUNNING_SHIELD, JUMPING_SHIELD, DUCKING_SHIELD, DEFAULT_TYPE, SHIELD_TYPE
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, RUNNING_SHIELD, JUMPING_SHIELD, DUCKING_SHIELD, DEFAULT_TYPE, SHIELD_TYPE, RUNNING_HAMMER, JUMPING_HAMMER, DUCKING_HAMMER, HAMMER_TYPE
 
-RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
-JUMP_IMG = {DEFAULT_TYPE: JUMPING_SHIELD, SHIELD_TYPE: JUMPING_SHIELD}
-DUCK_IMG = {DEFAULT_TYPE: DUCKING_SHIELD, SHIELD_TYPE:DUCKING_SHIELD}
+RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
+JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
+DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE:DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
 
 class Dinosaur(Sprite):
 
@@ -48,17 +48,19 @@ class Dinosaur(Sprite):
             sound_jump = True
             self.dino_jump = True
             self.dino_run = False
-            self.dino_duck = False
+            #self.dino_duck = False
 
         elif user_input[pygame.K_DOWN] and not self.dino_jump:
-            self.dino_duck = True
             self.dino_jump = False
             self.dino_run = False
+            self.dino_duck = True
+            
 
         elif not self.dino_jump:
+            self.dino_jump = False
             self.dino_duck = False
             self.dino_run = True
-            self.dino_jump = False
+            
 
         if self.step_index >= 10: #para que siga cambiando de imag el dino 
             self.step_index = 0
@@ -68,7 +70,7 @@ class Dinosaur(Sprite):
     def run(self):
         self.image = RUN_IMG[self.type][self.step_index // 5]
         self.dino_rect = self.image.get_rect()
-        self.dino_rect.x = self.Y_POS
+        self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
         self.step_index += 1
 

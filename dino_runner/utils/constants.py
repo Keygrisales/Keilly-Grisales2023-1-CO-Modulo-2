@@ -75,3 +75,7 @@ FONT_STYLE = "freesansbold.ttf"
 
 SHIELD_TYPE = "shield"
 
+HAMMER_TYPE = "hammer"
+
+
+GAME_OVER = pygame.image.load(os.path.join(IMG_DIR, 'Other/GameOver.png'))
